@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - SkinGuard AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+        
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .hero-section p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 2rem;
+        }
+        
+        .section p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .feature-card p {
+            color: #666;
+            font-size: 1rem;
+            margin: 0;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .team-member {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .team-member h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .team-member .role {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .team-member p {
+            color: #666;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 40px;
+            border-radius: 12px;
+            margin: 40px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .timeline-year {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+            margin-right: 30px;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-content h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-content p {
+            color: #666;
+            margin: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+            
+            .timeline-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .timeline-year {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🩺 SkinGuard AI</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="index.html#classify" class="nav-link">Classification</a></li>
+                <li><a href="index.html#history" class="nav-link">History</a></li>
+                <li><a href="profile.html" class="nav-link">Profile</a></li>
+                <li><a href="about.html" class="nav-link active">About</a></li>
+                <li><a href="help.html" class="nav-link">Help</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="user-info">
+                <span class="user-name">User</span>
+                <button class="logout-btn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="about-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>About SkinGuard AI</h1>
+            <p>Revolutionizing early skin cancer detection through advanced artificial intelligence and machine learning technologies, making professional-grade screening accessible to everyone.</p>
+        </div>
+
+        <!-- Mission Section -->
+        <div class="section">
+            <h2><i class="fas fa-bullseye"></i> Our Mission</h2>
+            <p>
+                At SkinGuard AI, our mission is to democratize access to early skin cancer detection through cutting-edge artificial intelligence. 
+                We believe that everyone deserves access to advanced healthcare screening tools, regardless of their location or economic status.
+            </p>
+            <p>
+                By leveraging the power of deep learning and computer vision, we're making it possible for individuals to perform preliminary 
+                skin lesion analysis from the comfort of their homes, while emphasizing the importance of professional medical consultation 
+                for definitive diagnosis and treatment.
+            </p>
+        </div>
+
+        <!-- Technology Section -->
+        <div class="section">
+            <h2><i class="fas fa-robot"></i> Our Technology</h2>
+            <p>
+                SkinGuard AI is built on state-of-the-art convolutional neural networks trained on thousands of dermatoscopic images. 
+                Our AI model has been developed in collaboration with leading dermatologists and medical institutions to ensure 
+                accuracy and reliability.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Deep Learning</h3>
+                    <p>Advanced neural networks trained on extensive medical image datasets for accurate lesion classification.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👁️</div>
+                    <h3>Computer Vision</h3>
+                    <p>Sophisticated image processing algorithms that can identify subtle patterns invisible to the human eye.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Statistical Analysis</h3>
+                    <p>Comprehensive analysis providing confidence scores and detailed risk assessments for each scan.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Privacy First</h3>
+                    <p>All image processing is done securely with end-to-end encryption and no data sharing with third parties.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Optimized</h3>
+                    <p>Designed to work seamlessly on smartphones and tablets for convenient on-the-go screening.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real-time Results</h3>
+                    <p>Get instant analysis results within seconds of uploading your image for immediate peace of mind.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <h2 style="color: white; margin-bottom: 20px;">Our Impact</h2>
+            <p style="color: white; opacity: 0.9; font-size: 1.1rem;">Making a difference in early detection and prevention</p>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">10,000+</div>
+                    <div class="stat-label">Images Analyzed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">84.5%</div>
+                    <div class="stat-label">Accuracy Rate</div>
+                </div>
+        
+            </div>
+        </div>
+
+        <!-- Team Section -->
+        <div class="section">
+            <h2><i class="fas fa-users"></i> Our Team</h2>
+            <p>
+                SkinGuard AI is developed by a diverse team of medical professionals, AI researchers, and software engineers 
+                who are passionate about improving healthcare outcomes through technology.
+            </p>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-avatar">👨‍⚕️</div>
+                    <h3>Dr. Sarah Johnson</h3>
+                    <div class="role">Chief Medical Officer</div>
+                    <p>Board-certified dermatologist with 15+ years of experience in skin cancer research and treatment.</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-avatar">👨‍💻</div>
+                    <h3>Michael Chen</h3>
+                    <div class="role">Lead AI Engineer</div>
+                    <p>PhD in Machine Learning with expertise in computer vision and medical image analysis.</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-avatar">👩‍🔬</div>
+                    <h3>Dr. Emily Rodriguez</h3>
+                    <div class="role">Research Director</div>
+                    <p>Medical researcher specializing in dermatopathology and AI applications in healthcare.</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-avatar">👨‍💼</div>
+                    <h3>David Kim</h3>
+                    <div class="role">Product Manager</div>
+                    <p>Healthcare technology veteran focused on user experience and product strategy.</p>
+                </div>
+            </div>
+        </div>
+
+        

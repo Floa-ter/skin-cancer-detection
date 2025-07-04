@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SkinGuard AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🩺 SkinGuard AI</div>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+                <li><a href="classify.html" class="nav-link">Classification</a></li>
+                <li><a href="history.html" class="nav-link">History</a></li>
+                <li><a href="profile.html" class="nav-link">Profile</a></li>
+            </ul>
+            <div class="user-info">
+                <span class="user-name">User</span>
+                <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <section class="page-section active">
+            <!-- Welcome Header -->
+            <div class="dashboard-header">
+                <h1>🩺 Welcome to SkinGuard AI</h1>
+                <p id="welcomeMessage">Your AI-powered skin health companion</p>
+                <div id="lastLoginInfo" style="color: #666; font-size: 0.9em; margin-top: 10px;"></div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div style="margin-bottom: 40px; text-align: center;">
+                <a href="classify.html" class="auth-btn" style="display: inline-block; margin: 0 10px; text-decoration: none;">
+                    <i class="fas fa-camera"></i> Analyze New Image
+                </a>
+                <a href="history.html" class="auth-btn" style="display: inline-block; margin: 0 10px; text-decoration: none; background: #28a745;">
+                    <i class="fas fa-history"></i> View History
+                </a>
+            </div>
+
+            <!-- Statistics Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalAnalyses">0</div>
+                    <div class="stat-label">Total Analyses</div>
+                    <div style="font-size: 0.8em; margin-top: 5px; opacity: 0.8;">This month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="benignResults">0</div>
+                    <div class="stat-label">Benign Results</div>
+                    <div style="font-size: 0.8em; margin-top: 5px; opacity: 0.8;">Low risk</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="flaggedResults">0</div>
+                    <div class="stat-label">Flagged for Review</div>
+                    <div style="font-size: 0.8em; margin-top: 5px; opacity: 0.8;">Need attention</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="avgConfidence">0%</div>
+                    <div class="stat-label">Avg Confidence</div>
+                    <div style="font-size: 0.8em; margin-top: 5px; opacity: 0.8;">AI accuracy</div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="classification-section">
+                <h3 style="margin-bottom: 20px; color: #333;">📊 Recent Activity</h3>
+                <div id="recentActivity">
+                    <!-- Recent activities will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Health Tips -->
+            <div class="classification-section">
+                <h3 style="margin-bottom: 20px; color: #333;">💡 Daily Health Tips</h3>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">☀️</div>
+                        <h4>Sun Protection</h4>
+                        <p>Always use SPF 30+ sunscreen, even on cloudy days. Reapply every 2 hours when outdoors.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🔍</div>
+                        <h4>Regular Self-Exams</h4>
+                        <p>Perform monthly skin self-examinations to detect any new or changing moles or lesions.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">👨‍⚕️</div>
+                        <h4>Professional Checkups</h4>
+                        <p>Schedule annual dermatological checkups, especially if you have risk factors or family history.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">📱</div>
+                        <h4>Track Changes</h4>
+                        <p>Document suspicious lesions with photos and monitor for changes using the ABCDE criteria.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABCDE Criteria -->
+            <div style="background: #f8f9fa; border-radius: 12px; padding: 30px; margin: 30px 0;">
+                <h3 style="text-align: center; margin-bottom: 25px; color: #333;">🎯 ABCDE Criteria for Melanoma Detection</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">

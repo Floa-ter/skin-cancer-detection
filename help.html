@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - SkinGuard AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .help-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .help-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .help-header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .help-header p {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .help-nav {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .help-nav-item {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #666;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .help-nav-item:hover,
+        .help-nav-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .help-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .help-section h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .help-section h3 {
+            color: #34495e;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .step-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .step-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 15px auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .error-box {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .accordion {
+            margin: 20px 0;
+        }
+
+        .accordion-item {
+            background: white;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: #f8f9fa;
+            padding: 20px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: #e9ecef;
+        }
+
+        .accordion-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-content.active {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        .search-help {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+        }
+
+        .video-placeholder {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .help-container {
+                padding: 20px 15px;
+            }
+            
+            .help-section {
+                padding: 25px 20px;
+            }
+            
+            .help-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .step-grid,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🩺 SkinGuard AI</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="index.html#classify" class="nav-link">Classification</a></li>
+                <li><a href="index.html#history" class="nav-link">History</a></li>
+                <li><a href="help.html" class="nav-link active">Help</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="user-info">
+                <span class="user-name">User</span>
+                <button class="logout-btn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="help-container">
+        <!-- Help Header -->
+        <div class="help-header">
+            <h1>📚 Help & Documentation</h1>
+            <p>Learn how to use SkinGuard AI effectively for skin cancer detection and get the most accurate results from our AI-powered analysis.</p>
+        </div>
+
+        <!-- Search Help -->
+        <div class="search-help">
+            <input type="text" class="search-input" placeholder="🔍 Search help topics..." id="helpSearch">
+        </div>
+
+        <!-- Help Navigation -->
+        <div class="help-nav">
+            <a href="#getting-started" class="help-nav-item active">Getting Started</a>
+            <a href="#using-ai" class="help-nav-item">Using the AI</a>
+            <a href="#results" class="help-nav-item">Understanding Results</a>
+            <a href="#troubleshooting" class="help-nav-item">Troubleshooting</a>
+            <a href="#safety" class="help-nav-item">Safety Guidelines</a>
+            <a href="#privacy" class="help-nav-item">Privacy & Security</a>
+        </div>
+
+        <!-- Getting Started Section -->
+        <div class="help-section" id="getting-started">
+            <h2><i class="fas fa-rocket"></i> Getting Started</h2>
+            
+            <h3>Creating Your Account</h3>
+            <div class="step-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>Sign Up</h4>
+                    <p>Create your account with a valid email address and secure password.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>Verify Email</h4>
+                    <p>Check your email and click the verification link to activate your account.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>Complete Profile</h4>
+                    <p>Add basic information to personalize your SkinGuard AI experience.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h4>Start Analyzing</h4>
+                    <p>Begin uploading images for AI-powered skin cancer detection.</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Pro Tip:</strong> Use the demo account (demo@example.com / demo123) to explore all features before creating your own account.
+            </div>
+        </div>
+
+        <!-- Using the AI Section -->
+        <div class="help-section" id="using-ai">
+            <h2><i class="fas fa-brain"></i> Using the AI Analysis</h2>
+            
+            <h3>Preparing Your Images</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>Camera Quality</h4>
+                    <p>Use a high-resolution camera (smartphone cameras work well). Ensure the lens is clean and scratch-free.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h4>Lighting</h4>
+                    <p>Natural daylight is best. Avoid direct flash, harsh shadows, or yellow indoor lighting.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h4>Focus & Framing</h4>
+                    <p>Fill 50-75% of the frame with the lesion. Keep the camera steady and ensure sharp focus.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📏</div>
+                    <h4>Size Reference</h4>
+                    <p>Include a coin, ruler, or your finger for size comparison. This helps our AI assess the lesion's dimensions.</p>
+                </div>
+            </div>
+
+            <h3>Upload Process</h3>
+            <div class="step-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>Navigate to Classification</h4>
+                    <p>Click on the "Classification" tab in the main navigation menu.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>Upload Image</h4>
+                    <p>Drag and drop your image or click to browse. Supports PNG, JPG, JPEG up to 10MB.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>Review Preview</h4>
+                    <p>Check the image preview to ensure quality and clarity before analysis.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h4>Start Analysis</h4>
+                    <p>Click "Analyze Image" to begin the AI-powered skin cancer detection process.</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong> Never upload images of sensitive areas, other people without consent, or images that are not skin lesions.
+            </div>
+        </div>
+
+        <!-- Understanding Results Section -->
+        <div class="help-section" id="results">
+            <h2><i class="fas fa-chart-line"></i> Understanding Results</h2>
+            
+            <h3>Result Categories</h3>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><i class="fas fa-check-circle" style="color: #28a745;"></i> Benign Classification</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p><strong>Confidence Score:</strong> 70-95% typically indicates a benign lesion.</p>
+                        <p><strong>What it means:</strong> The AI believes this lesion is likely non-cancerous.</p>
+                        <p><strong>Next steps:</strong> Continue regular self-examinations and routine dermatologist visits.</p>
+                        <p><strong>Remember:</strong> Even benign lesions should be monitored for changes over time.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><i class="fas fa-exclamation-triangle" style="color: #ffc107;"></i> Uncertain Classification</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p><strong>Confidence Score:</strong> 40-70% indicates uncertainty in classification.</p>
+                        <p><strong>What it means:</strong> The AI cannot make a confident determination.</p>
+                        <p><strong>Next steps:</strong> Consult with a dermatologist for professional evaluation.</p>
+                        <p><strong>Common causes:</strong> Poor image quality, unusual lesion characteristics, or lighting issues.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><i class="fas fa-exclamation-circle" style="color: #dc3545;"></i> Concerning Classification</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p><strong>Confidence Score:</strong> 70%+ for potentially malignant characteristics.</p>
+                        <p><strong>What it means:</strong> The lesion shows features that warrant immediate medical attention.</p>
+                        <p><strong>Next steps:</strong> Schedule an appointment with a dermatologist as soon as possible.</p>
+                        <p><strong>Important:</strong> Early detection and treatment significantly improve outcomes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>ABCDE Rule Reference</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🅰️</div>
+                    <h4>Asymmetry</h4>
+                    <p>One half of the mole doesn't match the other half in shape, color, or thickness.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🅱️</div>
+                    <h4>Border</h4>
+                    <p>Edges are irregular, ragged, notched, or blurred rather than smooth and even.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h4>Color</h4>
+                    <p>Multiple colors within the same lesion or color that has changed over time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📏</div>
+                    <h4>Diameter</h4>
+                    <p>Larger than 6mm (about the size of a pencil eraser) or growing in size.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h4>Evolving</h4>
+                    <p>Changes in size, shape, color, elevation, or symptoms like bleeding or itching.</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Remember:</strong> Our AI considers all these factors, but a dermatologist's trained eye is irreplaceable for definitive diagnosis.
+            </div>
+        </div>
+
+        <!-- Troubleshooting Section -->
+        <div class="help-section" id="troubleshooting">
+            <h2><i class="fas fa-tools"></i> Troubleshooting</h2>
+            
+            <h3>Common Issues</h3>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Upload Failed or Taking Too Long</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p><strong>Solutions:</strong></p>
+                        <ul>
+                            <li>Check your internet connection</li>
+                            <li>Ensure image is under 10MB and in PNG, JPG, or JPEG format</li>
+                            <li>Try compressing the image or using a different file</li>
+                            <li>Clear your browser cache and try again</li>
+                            <li>Try using a different browser or device</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Low Confidence Scores</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p><strong>Common causes and solutions:</strong></p>
+                        <ul>
+                            <li><strong>Poor lighting:</strong> Retake in natural daylight</li>
+                            <li><strong>Blurry image:</strong> Ensure camera is steady and focused</li>
+                            <li><strong>Too far/close:</strong> Lesion should fill 50-75% of frame</li>
+                            <li><strong>Shadows:</strong> Avoid direct flash, use diffused lighting</li>
+                            <li><strong>Hair covering lesion:</strong> Gently part hair for clear view</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Analysis Keeps Failing</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p><strong>Try these steps:</strong></p>
+                        <ul>
+                            <li>Refresh the page and try again</li>
+                            <li>Use a different image of the same lesion</li>
+                            <li>Check if the image actually contains a skin lesion</li>
+                            <li>Ensure stable internet connection</li>
+                            <li>Contact support if problems persist</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Can't Access My Account</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p><strong>Account access issues:</strong></p>
+                        <ul>
+                            <li>Verify your email address is correct</li>
+                            <li>Check spam folder for verification emails</li>
+                            <li>Try password reset if you forgot your password</li>
+                            <li>Clear browser cookies and cache</li>
+                            <li>Contact support for account recovery assistance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Best Practices</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📸</div>
+                    <h4>Photography Tips</h4>
+                    <p>Take multiple photos from different angles. Use macro mode if available. Clean the camera lens first.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h4>Retry Strategy</h4>
+                    <p>If results seem inaccurate, try different lighting or angles. Multiple analyses can provide better insights.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>Device Compatibility</h4>
+                    <p>Works best on modern browsers. Mobile devices should have updated operating systems for optimal performance.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Guidelines Section -->
+        <div class="help-section" id="safety">
+            <h2><i class="fas fa-shield-alt"></i> Safety Guidelines</h2>
+            
+            <div class="error-box">
+                <strong>🚨 Critical Safety Information</strong>
+                <p>SkinGuard AI is a screening tool, NOT a diagnostic tool. Never delay seeking professional medical care based on our AI results.</p>
+            </div>
+
+            <h3>When to See a Doctor Immediately</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔴</div>
+                    <h4>Concerning Results</h4>
+                    <p>Any result flagged as concerning or potentially malignant requires immediate professional evaluation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h4>Rapid Changes</h4>
+                    <p>Lesions that change quickly in size, color, or texture need immediate medical attention.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🩸</div>
+                    <h4>Bleeding or Pain</h4>
+                    <p>Any lesion that bleeds, becomes painful, or develops unusual symptoms requires prompt evaluation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">❓</div>
+                    <h4>When in Doubt</h4>
+                    <p>If you're concerned about any skin lesion, regardless of AI results, consult a healthcare professional.</p>
+                </div>
+            </div>
+
+            <h3>Regular Monitoring</h3>
+            <div class="tip-box">
+                <strong>📅 Recommended Schedule:</strong>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Self-examinations:</strong> Monthly full-body skin checks</li>
+                    <li><strong>Professional exams:</strong> Annual dermatologist visits</li>
+                    <li><strong>High-risk individuals:</strong> More frequent professional monitoring</li>
+                    <li><strong>Document changes:</strong> Use our platform to track lesions over time</li>
+                </ul>
+            </div>
+
+            <h3>Limitations of AI Analysis</h3>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>What Our AI Cannot Do</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>Provide definitive medical diagnosis</li>
+                            <li>Replace professional dermatological examination</li>
+                            <li>Analyze lesions in sensitive areas (eyes, mouth, genitals)</li>
+                            <li>Detect all types of skin cancer with 100% accuracy</li>
+                            <li>Consider your personal/family medical history</li>
+                            <li>Perform physical examination or biopsy</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Privacy & Security Section -->
+        <div class="help-section" id="privacy">
+            <h2><i class="fas fa-lock"></i> Privacy & Security</h2>
+            
+            <h3>Data Protection</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h4>Encryption</h4>
+                    <p>All images and data are encrypted in transit and at rest using industry-standard encryption protocols.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏥</div>
+                    <h4>HIPAA Compliance</h4>
+                    <p>We follow HIPAA guidelines for handling medical information and maintain strict privacy standards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚫</div>
+                    <h4>No Sharing</h4>
+                    <p>Your images and results are never shared with third parties without your explicit consent.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗑️</div>
+                    <h4>Data Deletion</h4>
+                    <p>You can delete your images and analysis history at any time from your account settings.</p>
+                </div>
+            </div>
+
+            <h3>Your Rights</h3>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Data Access and Control</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <ul>
+                            <li><strong>Access:</strong> View all your stored data and analysis history</li>
+                            <li><strong>Export:</strong> Download your data in standard formats</li>
+                            <li><strong>Correction:</strong> Update or correct any personal information</li>
+                            <li><strong>Deletion:</strong> Permanently delete your account and all associated data</li>
+                            <li><strong>Portability:</strong> Transfer your data to another service if desired</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>🛡️ Security Best Practices:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Use a strong, unique password for your account</li>
+                    <li>Log out when using shared or public computers</li>
+                    <li>Keep your browser and device updated</li>
+                    <li>Be cautious when sharing screenshots of results</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="help-section">
+            <h2><i class="fas fa-question-circle"></i> Still Need Help?</h2>
+            <p>If you couldn't find the answer to your question in this documentation, we're here to help!</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📧</div>
+                    <h4>Email Support</h4>
+                    <p>support@skinguard-ai.com<br>Response within 24 hours</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📞</div>
+                    <h4>Phone Support</h4>
+                    <p>+1 (555) 123-4567<br>Mon-Fri, 9 AM - 6 PM EST</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h4>Contact Form</h4>
+                    <p><a href="contact.html" style="color: #667eea;">Visit our contact page</a><br>for detailed inquiries</p>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <!-- Medical Disclaimer -->
+        <div class="disclaimer" style="margin-top: 50px;">
+            <strong>⚠️ Important Medical Disclaimer</strong>
+            This AI tool is designed to assist in early detection but should never replace professional medical consultation. 
+            Always consult with a qualified dermatologist or healthcare provider for proper diagnosis and treatment. 
+            The results provided are for informational purposes only and should not be considered as medical advice.
+        </div>
+    </div>
+
+    <script>
+        // Accordion functionality
+        function toggleAccordion(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('.fa-chevron-down');
+            
+            content.classList.toggle('active');
+            
+            if (content.classList.contains('active')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Help navigation
+        document.querySelectorAll('.help-nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all nav items
+                document.querySelectorAll('.help-nav-item').forEach(nav => nav.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Scroll to section
+                const target = this.getAttribute('href');
+                if (target.startsWith('#')) {
+                    document.querySelector(target).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Search functionality
+        document.getElementById('helpSearch').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const sections = document.querySelectorAll('.help-section');
+            
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (searchTerm === '' || text.includes(searchTerm)) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
+
+        // Logout functionality
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkinGuard AI - Classification</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🩺 SkinGuard AI</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="classify.html" class="nav-link active">Classification</a></li>
+                <li><a href="#" class="nav-link">History</a></li>
+                <li><a href="profile.html" class="nav-link">Profile</a></li>
+            </ul>
+            <div class="user-info">
+                <span class="user-name">Dr. Sarah Johnson</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Classification Header -->
+        <div class="dashboard-header">
+            <h1>🔬 AI-Powered Skin Analysis</h1>
+            <p>Upload skin lesion images for instant AI-powered classification and analysis</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid" style="margin-bottom: 2rem;">
+            <div class="stat-card">
+                <div class="stat-number" id="todayAnalyses">12</div>
+                <div class="stat-label">Today's Analyses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgAccuracy">94.7%</div>
+                <div class="stat-label">Average Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="processingTime">2.3s</div>
+                <div class="stat-label">Avg Processing Time</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="flaggedCases">3</div>
+                <div class="stat-label">Cases Flagged Today</div>
+            </div>
+        </div>
+
+        <!-- Main Classification Section -->
+        <div class="classification-section">
+            <!-- Information Cards -->
+            <div class="info-grid" style="margin-bottom: 2rem;">
+                <div class="info-card benign-info">
+                    <div class="info-icon" style="color: #10b981;">✓</div>
+                    <h4>Benign Lesions</h4>
+                    <p>Non-cancerous skin growths including moles, seborrheic keratoses, and other benign conditions. Regular monitoring recommended.</p>
+                    <div style="margin-top: 1rem; font-size: 0.9em; color: #059669;">
+                        <strong>Common Types:</strong> Moles, Freckles, Age Spots, Seborrheic Keratoses
+                    </div>
+                </div>
+                <div class="info-card malignant-info">
+                    <div class="info-icon" style="color: #ef4444;">⚠</div>
+                    <h4>Concerning Lesions</h4>
+                    <p>Lesions that show characteristics requiring immediate medical attention. May include melanoma, basal cell carcinoma, or other malignant conditions.</p>
+                    <div style="margin-top: 1rem; font-size: 0.9em; color: #dc2626;">
+                        <strong>Warning Signs:</strong> Asymmetry, Border irregularity, Color variation, Diameter changes
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="upload-container">
+                <div class="upload-section" id="uploadArea">
+                    <div class="upload-icon">📤</div>
+                    <div class="upload-text">Click to upload or drag and drop</div>
+                    <div class="upload-hint">PNG, JPG, JPEG up to 10MB • For best results, use high-resolution images</div>
+                    <input type="file" id="fileInput" accept="image/*" multiple>
+                </div>
+
+                <!-- Upload Guidelines -->
+                <div class="upload-guidelines">
+                    <h4><i class="fas fa-camera"></i> Photography Guidelines</h4>
+                    <div class="guidelines-grid">
+                        <div class="guideline-item">
+                            <div class="guideline-icon">💡</div>
+                            <div>
+                                <strong>Lighting:</strong>
+                                <p>Use natural daylight or bright, even artificial lighting. Avoid shadows and harsh flash.</p>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <div class="guideline-icon">🎯</div>
+                            <div>
+                                <strong>Focus:</strong>
+                                <p>Ensure the lesion is in sharp focus. Use macro mode if available on your camera.</p>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <div class="guideline-icon">📏</div>
+                            <div>
+                                <strong>Distance:</strong>
+                                <p>Fill the frame with the lesion while maintaining clear detail. Include surrounding normal skin.</p>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <div class="guideline-icon">📐</div>
+                            <div>
+                                <strong>Angle:</strong>
+                                <p>Take photos perpendicular to the skin surface. Consider multiple angles for complex lesions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Preview Grid -->
+            <div class="image-preview-grid" id="imagePreviewGrid"></div>
+
+            <!-- Analyze Button -->
+            <div style="text-align: center; margin: 2rem 0;">
+                <button class="analyze-btn" id="analyzeBtn" disabled>
+                    <i class="fas fa-microscope"></i> Analyze Images
+                </button>
+            </div>
+
+            <!-- Loading Animation -->
+            <div class="loading" id="loadingAnimation">
+                <div class="loading-content">
+                    <div class="spinner"></div>
+                    <h3>AI Analysis in Progress</h3>
+                    <p id="loadingText">Initializing neural network...</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="loading-steps">
+                        <div class="step active" id="step1">🔍 Image preprocessing</div>
+                        <div class="step" id="step2">🧠 Neural network analysis</div>
+                        <div class="step" id="step3">📊 Confidence calculation</div>
+                        <div class="step" id="step4">✅ Generating report</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-container" id="resultsContainer"></div>
+        </div>
+
+        <!-- Advanced Options -->
+        <div class="advanced-options">
+            <h3><i class="fas fa-cogs"></i> Advanced Analysis Options</h3>
+            <div class="options-grid">
+                <div class="option-card">
+                    <label class="switch">
+                        <input type="checkbox" id="detailedAnalysis" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="option-info">
+                        <h4>Detailed Analysis</h4>
+                        <p>Include ABCDE criteria assessment and morphological features</p>
+                    </div>
+                </div>
+                <div class="option-card">
+                    <label class="switch">
+                        <input type="checkbox" id="confidenceMetrics">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="option-info">
+                        <h4>Confidence Metrics</h4>
+                        <p>Show detailed confidence scores and uncertainty measures</p>
+                    </div>
+                </div>
+                <div class="option-card">
+                    <label class="switch">
+                        <input type="checkbox" id="comparativeAnalysis">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="option-info">
+                        <h4>Comparative Analysis</h4>
+                        <p>Compare with similar cases from medical database</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical Disclaimer -->
+        <div class="disclaimer">
+            <strong><i class="fas fa-exclamation-triangle"></i> Important Medical Disclaimer</strong>
+            <p>This AI analysis tool is designed to assist healthcare professionals and provide educational information. It should never replace professional medical examination, diagnosis, or treatment. The results provided are for screening and educational purposes only.</p>
+            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                <li>Always consult with a qualified dermatologist for proper diagnosis</li>
+                <li>This tool has not been FDA approved for diagnostic purposes</li>
+                <li>False positives and negatives may occur</li>
+                <li>Regular skin examinations by healthcare professionals are recommended</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // File upload functionality
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const imagePreviewGrid = document.getElementById('imagePreviewGrid');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loadingAnimation = document.getElementById('loadingAnimation');
+        const resultsContainer = document.getElementById('resultsContainer');
+
+        let uploadedFiles = [];
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    uploadedFiles.push(file);
+                    createImagePreview(file);
+                }
+            });
+            
+            analyzeBtn.disabled = uploadedFiles.length === 0;
+        }
+
+        function createImagePreview(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'image-preview-item';
+                previewDiv.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview" class="preview-image">
+                    <button class="remove-image" onclick="removeImage(this, '${file.name}')">×</button>
+                    <div class="image-info">
+                        <span class="filename">${file.name}</span>
+                        <span class="filesize">${(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                    </div>
+                `;
+                imagePreviewGrid.appendChild(previewDiv);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage(button, filename) {
+            uploadedFiles = uploadedFiles.filter(file => file.name !== filename);
+            button.parentElement.remove();
+            analyzeBtn.disabled = uploadedFiles.length === 0;
+        }
+
+        // Analysis functionality
+        analyzeBtn.addEventListener('click', startAnalysis);
+
+        function startAnalysis() {
+            loadingAnimation.classList.add('active');
+            resultsContainer.innerHTML = '';
+            
+            simulateAnalysis();
+        }
+
+        function simulateAnalysis() {
+            const steps = [
+                { id: 'step1', text: 'Preprocessing images...', duration: 1000 },
+                { id: 'step2', text: 'Running neural network analysis...', duration: 2000 },
+                { id: 'step3', text: 'Calculating confidence scores...', duration: 1500 },
+                { id: 'step4', text: 'Generating detailed report...', duration: 1000 }
+            ];
+
+            let currentStep = 0;
+            const progressFill = document.getElementById('progressFill');
+            const loadingText = document.getElementById('loadingText');
+
+            function nextStep() {
+                if (currentStep > 0) {
+                    document.getElementById(steps[currentStep - 1].id).classList.remove('active');
+                    document.getElementById(steps[currentStep - 1].id).classList.add('completed');
+                }
+
+                if (currentStep < steps.length) {
+                    const step = steps[currentStep];
+                    document.getElementById(step.id).classList.add('active');
+                    loadingText.textContent = step.text;
+                    
+                    const progress = ((currentStep + 1) / steps.length) * 100;
+                    progressFill.style.width = progress + '%';
+
+                    currentStep++;
+                    setTimeout(nextStep, step.duration);
+                } else {
+                    showResults();
+                }
+            }
+
+            nextStep();
+        }
+
+        function showResults() {
+            loadingAnimation.classList.remove('active');
+            
+            const results = uploadedFiles.map((file, index) => {
+                const isBenign = Math.random() > 0.3;
+                const confidence = (Math.random() * 30 + 70).toFixed(1);
+                
+                return {
+                    filename: file.name,
+                    classification: isBenign ? 'Benign' : 'Concerning - Requires Medical Attention',
+                    confidence: confidence,
+                    isBenign: isBenign,
+                    details: generateAnalysisDetails(isBenign, confidence)
+                };
+            });
+
+            displayResults(results);
+        }
+
+        function generateAnalysisDetails(isBenign, confidence) {
+            if (isBenign) {
+                return {
+                    type: 'Likely benign lesion',
+                    features: ['Regular borders', 'Uniform coloration', 'Symmetric shape', 'Small size'],
+                    recommendation: 'Continue regular self-examinations and routine dermatological check-ups.',
+                    abcde: {
+                        asymmetry: 'Low',
+                        border: 'Regular',
+                        color: 'Uniform',
+                        diameter: '< 6mm',
+                        evolving: 'Stable'
+                    }
+                };
+            } else {
+                return {
+                    type: 'Potentially concerning lesion',
+                    features: ['Irregular borders', 'Color variation', 'Asymmetric shape', 'Notable size'],
+                    recommendation: 'Immediate consultation with a dermatologist is strongly recommended.',
+                    abcde: {
+                        asymmetry: 'Present',
+                        border: 'Irregular',
+                        color: 'Variable',
+                        diameter: '> 6mm',
+                        evolving: 'Changing'
+                    }
+                };
+            }
+        }
+
+        function displayResults(results) {
+            resultsContainer.innerHTML = results.map(result => `
+                <div class="result-card ${result.isBenign ? 'result-benign' : 'result-concerning'}">
+                    <div class="result-header">
+                        <h3>${result.classification}</h3>
+                        <div class="confidence-badge">
+                            <span class="confidence-label">Confidence:</span>
+                            <span class="confidence-value">${result.confidence}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-details">
+                        <div class="detail-section">
+                            <h4><i class="fas fa-search"></i> Analysis Details</h4>
+                            <p><strong>Classification:</strong> ${result.details.type}</p>
+                            <p><strong>Key Features:</strong> ${result.details.features.join(', ')}</p>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-clipboard-list"></i> ABCDE Assessment</h4>
+                            <div class="abcde-grid">
+                                <div><strong>A</strong>symmetry: ${result.details.abcde.asymmetry}</div>
+                                <div><strong>B</strong>order: ${result.details.abcde.border}</div>
+                                <div><strong>C</strong>olor: ${result.details.abcde.color}</div>
+                                <div><strong>D</strong>iameter: ${result.details.abcde.diameter}</div>
+                                <div><strong>E</strong>volving: ${result.details.abcde.evolving}</div>
+                            </div>
+                        </div>
+
+                        <div class="recommendation-section">
+                            <h4><i class="fas fa-user-md"></i> Recommendation</h4>
+                            <p>${result.details.recommendation}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="result-actions">
+                        <button class="action-btn save-btn" onclick="saveResult('${result.filename}')">
+                            <i class="fas fa-save"></i> Save Result
+                        </button>
+                        <button class="action-btn export-btn" onclick="exportResult('${result.filename}')">
+                            <i class="fas fa-download"></i> Export PDF
+                        </button>
+                        <button class="action-btn share-btn" onclick="shareResult('${result.filename}')">
+                            <i class="fas fa-share"></i> Share with Doctor
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            resultsContainer.style.display = 'block';
+        }
+
+        // Action functions
+        function saveResult(filename) {
+            alert(`Result for ${filename} saved to history`);
+        }
+
+        function exportResult(filename) {
+            alert(`Exporting PDF report for ${filename}`);
+        }
+
+        function shareResult(filename) {
+            alert(`Sharing result for ${filename} with healthcare provider`);
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

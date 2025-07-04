@@ -1,0 +1,1573 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkinGuard AI - Skin Cancer Detection</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Navigation Bar Styles */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: none;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #007bff;
+            background: rgba(0, 123, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            color: #007bff;
+            background: rgba(0, 123, 255, 0.15);
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.2);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-name {
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 123, 255, 0.1);
+            border-radius: 20px;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Authentication Styles */
+        .auth-container {
+            max-width: 400px;
+            margin: 2rem auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h2 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .auth-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 123, 255, 0.3);
+        }
+
+        .auth-toggle {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Creative Links Container */
+        .creative-links {
+            margin-top: 2rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .creative-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            text-decoration: none;
+            color: #495057;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .creative-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .creative-link:hover::before {
+            left: 100%;
+        }
+
+        .creative-link:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.2);
+            border-color: #007bff;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+        }
+
+        .link-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .creative-link:hover .link-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .link-text {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .link-subtitle {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 0.2rem;
+            text-align: center;
+        }
+
+        /* Specific link colors */
+        .help-link {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        }
+
+        .help-link:hover {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+        }
+
+        .contact-link {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+        }
+
+        .contact-link:hover {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+        }
+
+        .about-link {
+            background: linear-gradient(135deg, #fff3e0, #ffcc02);
+        }
+
+        .about-link:hover {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        /* Dashboard Styles */
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Classification Styles */
+        .classification-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .classification-section h2 {
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .benign-info {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .malignant-info {
+            border-color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        .info-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-card h4 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            border: 3px dashed #007bff;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 123, 255, 0.05);
+        }
+
+        .upload-section:hover {
+            border-color: #0056b3;
+            background: rgba(0, 123, 255, 0.1);
+        }
+
+        .upload-section.drag-over {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: #666;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .preview-container {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .remove-image {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Analyze Button */
+        .analyze-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(40, 167, 69, 0.3);
+        }
+        
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* History Styles */
+        .history-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .history-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #007bff;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .history-date {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .history-result {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .history-result.benign {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .history-result.suspicious {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .history-result.malignant {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .history-details p {
+            margin: 0.5rem 0;
+            color: #666;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            color: #856404;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .nav-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 0;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+                margin-top: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .user-info {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .user-name {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .logout-btn {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+
+            .auth-container {
+                margin: 1rem auto;
+                padding: 2rem;
+            }
+
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .classification-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .info-card {
+                padding: 1.5rem;
+            }
+
+            .upload-section {
+                padding: 2rem 1rem;
+            }
+
+            .upload-icon {
+                font-size: 2rem;
+            }
+
+            .upload-text {
+                font-size: 1rem;
+            }
+
+            .history-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .analyze-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .logo {
+                justify-content: center;
+                margin-bottom: 0.5rem;
+            }
+
+            .user-info {
+                justify-content: center;
+            }
+
+            .auth-container {
+                padding: 1.5rem;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .classification-section {
+                padding: 1.5rem 1rem;
+            }
+
+            .upload-section {
+                padding: 1.5rem 1rem;
+            }
+
+            .history-container {
+                padding: 1.5rem;
+            }
+
+            .history-item {
+                padding: 1rem;
+            }
+
+            .creative-link {
+                padding: 0.8rem;
+            }
+
+            .link-icon {
+                font-size: 1.5rem;
+            }
+
+            .link-text {
+                font-size: 0.8rem;
+            }
+
+            .link-subtitle {
+                font-size: 0.65rem;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus styles for better accessibility */
+        .nav-link:focus,
+        .auth-btn:focus,
+        .logout-btn:focus,
+        .analyze-btn:focus,
+        .creative-link:focus,
+        input:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                🩺 SkinGuard AI
+            </div>
+            
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                ☰
+            </button>
+            
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link active" data-section="dashboard">Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-section="classify">Classification</a></li>
+                <li><a href="#" class="nav-link" data-section="history">History</a></li>
+            </ul>
+            
+            <div class="user-info">
+                <span class="user-name">User</span>
+                <button class="logout-btn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Login Section -->
+        <section id="login" class="page-section active">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to access SkinGuard AI</p>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" name="email" required placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="password" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="auth-btn">Sign In</button>
+                </form>
+                <p>Don't have an account? <span class="auth-toggle" data-target="signup">Sign up here</span></p>
+                
+                <!-- Enhanced Creative Links -->
+                <div class="creative-links">
+                    <div class="links-grid">
+                        <a href="http://127.0.0.1:5500/help.html" class="creative-link help-link">
+                            <div class="link-icon">🆘</div>
+                            <div class="link-text">Help Center</div>
+                            <div class="link-subtitle">Get Support</div>
+                        </a>
+                        <a href="http://127.0.0.1:5500/contact.html" class="creative-link contact-link">
+                            <div class="link-icon">📞</div>
+                            <div class="link-text">Contact Us</div>
+                            <div class="link-subtitle">Get in Touch</div>
+                        </a>
+                        <a href="http://127.0.0.1:5500/about.html" class="creative-link about-link">
+                            <div class="link-icon">ℹ️</div>
+                            <div class="link-text">About Us</div>
+                            <div class="link-subtitle">Our Story</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Signup Section -->
+        <section id="signup" class="page-section">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2>Create Account</h2>
+                    <p>Join SkinGuard AI for early detection</p>
+                </div>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" name="name" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" name="email" required placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" name="password" required placeholder="Create a password">
+                    </div>
+                    <button type="submit" class="auth-btn">Create Account</button>
+                </form>
+                <p>Already have an account? <span class="auth-toggle" data-target="login">Sign in here</span></p>
+                
+                <!-- Enhanced Creative Links -->
+                <div class="creative-links">
+                    <div class="links-grid">
+                        <a href="http://127.0.0.1:5500/help.html" class="creative-link help-link">
+                            <div class="link-icon">🆘</div>
+                            <div class="link-text">Help Center</div>
+                            <div class="link-subtitle">Get Support</div>
+                        </a>
+                        <a href="http://127.0.0.1:5500/contact.html" class="creative-link contact-link">
+                            <div class="link-icon">📞</div>
+                            <div class="link-text">Contact Us</div>
+                            <div class="link-subtitle">Get in Touch</div>
+                        </a>
+                        <a href="http://127.0.0.1:5500/about.html" class="creative-link about-link">
+                            <div class="link-icon">ℹ️</div>
+                            <div class="link-text">About Us</div>
+                            <div class="link-subtitle">Our Story</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="page-section">
+            <div class="dashboard-header">
+                <h1>🩺 SkinGuard AI Dashboard</h1>
+                <p>Advanced AI-powered skin cancer detection and analysis</p>
+            </div>
+
+            <!-- Statistics Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Total Analyses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Benign Results</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Flagged for Review</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0%</div>
+                    <div class="stat-label">Avg Confidence</div>
+                </div>
+            </div>
+  
+            <!-- Medical Disclaimer -->
+            <div class="disclaimer">
+                <strong>⚠️ Important Medical Disclaimer</strong>
+                This AI tool is designed to assist in early detection but should never replace professional medical consultation. 
+                Always consult with a qualified dermatologist or healthcare provider for proper diagnosis and treatment. 
+                The results provided are for informational purposes only and should not be considered as medical advice.
+            </div>
+        </section>
+
+        <!-- Classification Section -->
+        <section id="classify" class="page-section">
+            <div class="classification-section">
+                <h2 style="text-align: center; margin-bottom: 30px;">🔬 Skin Lesion Analysis</h2>
+                
+                <!-- Information Cards -->
+                <div class="info-grid">
+                    <div class="info-card benign-info">
+                        <div class="info-icon" style="color: #28a745;">✓</div>
+                        <h4>Benign Lesions</h4>
+                        <p>Non-cancerous skin growths that are generally harmless. Regular monitoring is still recommended.</p>
+                    </div>
+                    <div class="info-card malignant-info">
+                        <div class="info-icon" style="color: #dc3545;">⚠</div>
+                        <h4>Concerning Lesions</h4>
+                        <p>Lesions that may require immediate medical attention. Early detection saves lives.</p>
+                    </div>
+                </div>
+
+                <!-- File Upload Section -->
+                <div class="upload-section">
+                    <div class="upload-icon">📤</div>
+                    <div class="upload-text">Click to upload or drag and drop</div>
+                    <div class="upload-hint">PNG, JPG, JPEG up to 10MB</div>
+                    <input type="file" id="fileInput" accept="image/*">
+                </div>
+
+                <!-- Image Preview -->
+                <div class="image-preview">
+                    <div class="preview-container">
+                        <img src="" alt="Preview" class="preview-image">
+                        <button class="remove-image">×</button>
+                    </div>
+                </div>
+
+                <!-- Analyze Button -->
+                <div style="text-align: center;">
+                    <button class="analyze-btn">🔍 Analyze Image</button>
+                </div>
+                
+
+                <!-- Loading Animation -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing image with AI... Please wait.</p>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results">
+                    <div class="result-title"></div>
+                    <div class="result-confidence"></div>
+                    <div class="result-advice"></div>
+                </div>
+            </div>
+
+            <!-- Medical Disclaimer -->
+            <div class="disclaimer">
+                <strong>⚠️ Medical Disclaimer</strong>
+                This AI analysis tool is intended for educational and screening purposes only. It cannot replace professional medical examination and diagnosis. If you have concerns about any skin lesion, please consult a qualified dermatologist immediately. Early detection and professional medical care are essential for optimal health outcomes.
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history" class="page-section">
+            <div class="dashboard-header">
+                <h1>📈 Analysis History</h1>
+                <p>Review your previous skin lesion analyses</p>
+            </div>
+
+            <div class="history-container">
+                <!-- History items will be populated by JavaScript -->
+            </div>
+
+            <!-- Export Options -->
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="analyze-btn" onclick="exportHistory()" style="display: inline-block; margin-right: 10px;">
+                    📄 Export Report
+                </button>
+                <button class="analyze-btn" onclick="clearHistory()" style="display: inline-block; background: #dc3545;">
+                    🗑️ Clear History
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // User Management and Data Storage with localStorage
+        class UserSession {
+            constructor() {
+                this.currentUser = null;
+                this.users = {};
+                this.loadUsers();
+            }
+
+            // Load users from localStorage
+            loadUsers() {
+                const usersData = localStorage.getItem('skinguard_users');
+                this.users = usersData ? JSON.parse(usersData) : {};
+            }
+
+            // Save users to localStorage
+            saveUsers() {
+                localStorage.setItem('skinguard_users', JSON.stringify(this.users));
+            }
+
+            // Create new user account
+            createUser(userData) {
+                // Check if user already exists
+                const existingUser = Object.values(this.users).find(u => u.email === userData.email);
+                if (existingUser) {
+                    return { error: "User with this email already exists" };
+                }
+
+                const userId = 'user_' + Date.now();
+                this.users[userId] = {
+                    id: userId,
+                    name: userData.name,
+                    email: userData.email,
+                    password: userData.password, // Note: In production, hash passwords!
+                    analysisHistory: [],
+                    stats: {
+                        totalAnalyses: 0,
+                        benignResults: 0,
+                        flaggedResults: 0,
+                        avgConfidence: 0
+                    },
+                    createdAt: new Date().toISOString()
+                };
+                this.saveUsers();
+                return { userId };
+            }
+
+            // Login user
+            loginUser(email, password) {
+                const user = Object.values(this.users).find(u => u.email === email && u.password === password);
+                if (user) {
+                    this.currentUser = user.id;
+                    localStorage.setItem('skinguard_currentUser', user.id);
+                    return user;
+                }
+                return null;
+            }
+
+            // Logout user
+            logoutUser() {
+                this.currentUser = null;
+                localStorage.removeItem('skinguard_currentUser');
+                this.clearUserData();
+            }
+
+            // Get current user data
+            getCurrentUser() {
+                return this.currentUser ? this.users[this.currentUser] : null;
+            }
+
+            // Initialize session from localStorage
+            initialize() {
+                const currentUserId = localStorage.getItem('skinguard_currentUser');
+                if (currentUserId && this.users[currentUserId]) {
+                    this.currentUser = currentUserId;
+                    return this.users[currentUserId];
+                }
+                return null;
+            }
+
+            // Add analysis to current user's history
+            addAnalysis(analysisData) {
+                if (!this.currentUser) return;
+                
+                const user = this.users[this.currentUser];
+                const analysis = {
+                    id: Date.now(),
+                    timestamp: new Date().toISOString(),
+                    ...analysisData
+                };
+                
+                user.analysisHistory.push(analysis);
+                this.updateUserStats();
+                this.saveUsers();
+            }
+
+            // Update user statistics
+            updateUserStats() {
+                if (!this.currentUser) return;
+                
+                const user = this.users[this.currentUser];
+                const history = user.analysisHistory;
+                
+                user.stats.totalAnalyses = history.length;
+                user.stats.benignResults = history.filter(a => a.result === 'Benign').length;
+                user.stats.flaggedResults = history.filter(a => a.result === 'Malignant' || a.result === 'Suspicious').length;
+                
+                if (history.length > 0) {
+                    const totalConfidence = history.reduce((sum, a) => sum + a.confidence, 0);
+                    user.stats.avgConfidence = Math.round(totalConfidence / history.length);
+                }
+            }
+
+            // Clear user-specific UI data
+            clearUserData() {
+                // Reset statistics display
+                document.querySelectorAll('.stat-number').forEach((el, index) => {
+                    const values = ['0', '0', '0', '0%'];
+                    el.textContent = values[index];
+                });
+                
+                // Clear history container
+                const historyContainer = document.querySelector('.history-container');
+                if (historyContainer) {
+                    historyContainer.innerHTML = '<p style="text-align: center; color: #666;">No analysis history available.</p>';
+                }
+                
+                // Clear any analysis results
+                const resultsSection = document.querySelector('.results');
+                if (resultsSection) {
+                    resultsSection.style.display = 'none';
+                }
+                
+                // Reset image preview
+                const imagePreview = document.querySelector('.image-preview');
+                if (imagePreview) {
+                    imagePreview.style.display = 'none';
+                }
+            }
+
+            // Clear specific user's history
+            clearUserHistory() {
+                if (!this.currentUser) return;
+                
+                this.users[this.currentUser].analysisHistory = [];
+                this.updateUserStats();
+                this.saveUsers();
+                this.refreshDashboard();
+                this.refreshHistory();
+            }
+
+            // Refresh dashboard with current user data
+            refreshDashboard() {
+                if (!this.currentUser) return;
+                
+                const user = this.users[this.currentUser];
+                const stats = user.stats;
+                
+                const statNumbers = document.querySelectorAll('.stat-number');
+                if (statNumbers.length >= 4) {
+                    statNumbers[0].textContent = stats.totalAnalyses;
+                    statNumbers[1].textContent = stats.benignResults;
+                    statNumbers[2].textContent = stats.flaggedResults;
+                    statNumbers[3].textContent = stats.avgConfidence + '%';
+                }
+            }
+
+            // Refresh history display
+            refreshHistory() {
+                if (!this.currentUser) return;
+                
+                const user = this.users[this.currentUser];
+                const historyContainer = document.querySelector('.history-container');
+                
+                if (!historyContainer) return;
+                
+                if (user.analysisHistory.length === 0) {
+                    historyContainer.innerHTML = '<p style="text-align: center; color: #666;">No analysis history available.</p>';
+                    return;
+                }
+                
+                historyContainer.innerHTML = user.analysisHistory
+                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                    .map(analysis => `
+                        <div class="history-item">
+                            <div class="history-header">
+                                <span class="history-date">${new Date(analysis.timestamp).toLocaleDateString()}</span>
+                                <span class="history-result ${analysis.result.toLowerCase()}">${analysis.result}</span>
+                            </div>
+                            <div class="history-details">
+                                <p><strong>Confidence:</strong> ${analysis.confidence}%</p>
+                                <p><strong>Recommendation:</strong> ${analysis.advice}</p>
+                                ${analysis.imageName ? `<p><strong>Image:</strong> ${analysis.imageName}</p>` : ''}
+                            </div>
+                        </div>
+                    `).join('');
+            }
+        }
+
+        // Initialize user session
+        const userSession = new UserSession();
+
+        // DOM Elements
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const logoutBtn = document.querySelector('.logout-btn');
+        const authToggles = document.querySelectorAll('.auth-toggle');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pageSections = document.querySelectorAll('.page-section');
+        const fileInput = document.getElementById('fileInput');
+        const uploadSection = document.querySelector('.upload-section');
+        const imagePreview = document.querySelector('.image-preview');
+        const analyzeBtn = document.querySelector('.analyze-btn');
+        const loading = document.querySelector('.loading');
+        const results = document.querySelector('.results');
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        // Mobile menu functionality
+        if (mobileMenuToggle && navMenu) {
+            mobileMenuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                mobileMenuToggle.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
+            });
+
+            // Close mobile menu when clicking nav links
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    mobileMenuToggle.textContent = '☰';
+                });
+            });
+        }
+
+        // Authentication Event Listeners
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(loginForm);
+                const email = formData.get('email');
+                const password = formData.get('password');
+                
+                const user = userSession.loginUser(email, password);
+                if (user) {
+                    document.querySelector('.user-name').textContent = user.name;
+                    showSection('dashboard');
+                    userSession.refreshDashboard();
+                    userSession.refreshHistory();
+                } else {
+                    alert('Invalid email or password');
+                }
+            });
+        }
+
+        if (signupForm) {
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(signupForm);
+                const userData = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    password: formData.get('password')
+                };
+                
+                const result = userSession.createUser(userData);
+                if (result.error) {
+                    alert(result.error);
+                    return;
+                }
+                
+                userSession.currentUser = result.userId;
+                document.querySelector('.user-name').textContent = userData.name;
+                showSection('dashboard');
+                userSession.refreshDashboard();
+                userSession.refreshHistory();
+            });
+        }
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                userSession.logoutUser();
+                showSection('login');
+                document.querySelector('.user-name').textContent = 'User';
+            });
+        }
+
+        // Auth toggle functionality
+        authToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const target = toggle.getAttribute('data-target');
+                showSection(target);
+            });
+        });
+
+       // Navigation functionality
+        // Navigation functionality
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!userSession.getCurrentUser()) {
+                    showSection('login');
+                    return;
+                }
+                
+                const section = link.getAttribute('data-section');
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                showSection(section);
+                
+                // Refresh history when navigating to history section
+                if (section === 'history') {
+                    userSession.refreshHistory();
+                }
+            });
+        });
+        // Section display function
+        function showSection(sectionId) {
+            pageSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Show/hide navbar based on section
+            const navbar = document.querySelector('.navbar');
+            if (sectionId === 'login' || sectionId === 'signup') {
+                navbar.style.display = 'none';
+            } else {
+                navbar.style.display = 'flex';
+            }
+        }
+
+        // File upload functionality
+        if (uploadSection && fileInput) {
+            uploadSection.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            uploadSection.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadSection.classList.add('drag-over');
+            });
+            
+            uploadSection.addEventListener('dragleave', () => {
+                uploadSection.classList.remove('drag-over');
+            });
+            
+            uploadSection.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadSection.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelect(files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+        }
+
+        // File selection handler
+        function handleFileSelect(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please select a valid image file');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = imagePreview.querySelector('.preview-image');
+                img.src = e.target.result;
+                img.dataset.filename = file.name;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Remove image functionality
+        const removeImageBtn = document.querySelector('.remove-image');
+        if (removeImageBtn) {
+            removeImageBtn.addEventListener('click', () => {
+                imagePreview.style.display = 'none';
+                fileInput.value = '';
+                results.style.display = 'none';
+            });
+        }
+
+        // Analyze image functionality
+        if (analyzeBtn) {
+            analyzeBtn.addEventListener('click', () => {
+                if (!userSession.getCurrentUser()) {
+                    alert('Please login to use this feature');
+                    return;
+                }
+                
+                const img = imagePreview.querySelector('.preview-image');
+                if (!img.src || img.src === '') {
+                    alert('Please upload an image first');
+                    return;
+                }
+
+                // Show loading
+                loading.style.display = 'block';
+                results.style.display = 'none';
+
+                // Simulate AI analysis
+                setTimeout(() => {
+                    const analysisResult = simulateAIAnalysis();
+                    displayResults(analysisResult);
+                    
+                    // Add to user's history
+                    userSession.addAnalysis({
+                        ...analysisResult,
+                        imageName: img.dataset.filename
+                    });
+                    
+                    // Refresh dashboard stats
+                    userSession.refreshDashboard();
+                    
+                    loading.style.display = 'none';
+                }, 3000);
+            });
+        }
+
+        // Simulate AI analysis
+        function simulateAIAnalysis() {
+            const outcomes = [
+                { result: 'Benign', confidence: Math.floor(Math.random() * 20) + 75, advice: 'This lesion appears to be benign. Continue regular skin self-examinations and consult a dermatologist if you notice any changes.' },
+                { result: 'Suspicious', confidence: Math.floor(Math.random() * 15) + 60, advice: 'This lesion shows some concerning features. Please schedule an appointment with a dermatologist for professional evaluation as soon as possible.' },
+                { result: 'Malignant', confidence: Math.floor(Math.random() * 10) + 85, advice: 'This lesion shows features that may indicate malignancy. Please seek immediate medical attention from a qualified dermatologist or oncologist.' }
+            ];
+            
+            return outcomes[Math.floor(Math.random() * outcomes.length)];
+        }
+
+        // Display analysis results
+        function displayResults(analysis) {
+            const resultTitle = results.querySelector('.result-title');
+            const resultConfidence = results.querySelector('.result-confidence');
+            const resultAdvice = results.querySelector('.result-advice');
+            
+            resultTitle.innerHTML = `<h3 style="color: ${getResultColor(analysis.result)}">Result: ${analysis.result}</h3>`;
+            resultConfidence.innerHTML = `<p><strong>Confidence Level:</strong> ${analysis.confidence}%</p>`;
+            resultAdvice.innerHTML = `<p><strong>Recommendation:</strong> ${analysis.advice}</p>`;
+            
+            results.style.display = 'block';
+        }
+
+        // Get result color
+        function getResultColor(result) {
+            switch(result) {
+                case 'Benign': return '#28a745';
+                case 'Suspicious': return '#ffc107';
+                case 'Malignant': return '#dc3545';
+                default: return '#333';
+            }
+        }
+
+        // Export history function
+        function exportHistory() {
+            if (!userSession.getCurrentUser()) {
+                alert('Please login to export history');
+                return;
+            }
+            
+            const user = userSession.getCurrentUser();
+            if (user.analysisHistory.length === 0) {
+                alert('No analysis history to export');
+                return;
+            }
+            
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Date,Result,Confidence,Image,Recommendation\n" +
+                user.analysisHistory.map(analysis => 
+                    `"${new Date(analysis.timestamp).toLocaleDateString()}","${analysis.result}","${analysis.confidence}%","${analysis.imageName || 'N/A'}","${analysis.advice}"`
+                ).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `skinguard_analysis_report_${user.name.replace(/\s+/g, '_')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Clear history function
+        function clearHistory() {
+            if (!userSession.getCurrentUser()) {
+                alert('Please login to clear history');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to clear all analysis history? This action cannot be undone.')) {
+                userSession.clearUserHistory();
+                alert('Analysis history cleared successfully');
+            }
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('login');
+        });
+
+        // Handle window resize for responsive design
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                navMenu.classList.remove('active');
+                if (mobileMenuToggle) {
+                    mobileMenuToggle.querySelector('i').classList.replace('fa-times', 'fa-bars');
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
