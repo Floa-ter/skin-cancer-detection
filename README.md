@@ -72,8 +72,11 @@ This section stores the past predictions made by the user with corresponding res
 ![History Page](history.png)
 
 Also supported in mobile -->
+
 ![Mobile Screenshot 1](mobile_version.jpg)
+
 ![Mobile Screenshot 2](mobile_version2.jpg)
+
 ---
 
 
