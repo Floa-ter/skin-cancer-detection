@@ -70,6 +70,10 @@ skin-cancer-detection/
 This section stores the past predictions made by the user with corresponding results, images, and timestamps for easy tracking and analysis.
 
 ![History Page](history.png)
+
+Also supported in mobile -->
+(mobile_version.jpg)
+(mobile_version2.jpg)
 ---
 
 
