@@ -12,7 +12,9 @@ A Deep Learning-powered web application that detects skin cancer from dermatosco
 - ✅ Real-time predictions via web interface (Flask / Streamlit)
 - ✅ Clean, responsive UI for easy image upload and result viewing
 
-📁 PROJECT STRUCTURE -->
+---
+
+📁 PROJECT STRUCTURE 
 skin-cancer-detection/
 │
 ├── app/                         # Python scripts (core logic)
