@@ -14,7 +14,8 @@ A Deep Learning-powered web application that detects skin cancer from dermatosco
 
 ---
 
-📁 PROJECT STRUCTURE 
+📁 PROJECT STRUCTURE
+---
 skin-cancer-detection/
 │
 ├── app/                         # Python scripts (core logic)
